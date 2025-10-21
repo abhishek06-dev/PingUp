@@ -11,11 +11,26 @@ import storyRouter from './routes/storyRoutes.js';
 import messageRouter from './routes/messageRoutes.js';
 
 const app = express();
+const allowedOrigins = ["https://ping-up-pied.vercel.app"];
 
 await connectDB();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (e.g. Postman)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+app.options('*', cors());
 app.use(clerkMiddleware());
 
 app.get('/', (req, res)=> res.send('Server is running'))
