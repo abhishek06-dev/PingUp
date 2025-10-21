@@ -11,7 +11,6 @@ import storyRouter from './routes/storyRoutes.js';
 import messageRouter from './routes/messageRoutes.js';
 
 const app = express();
-
 await connectDB();
 
 app.use(express.json());
